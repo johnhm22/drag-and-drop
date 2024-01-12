@@ -49,10 +49,10 @@ const DropZone = ({ className }: { className: string }) => {
     // fileRejections,
   } = useDropzone({
     onDrop,
-    // accept: {
-    //   'image/jpeg': ['.jpeg'],
-    //   'image/png': ['.png'],
-    // },
+    accept: {
+      'image/jpeg': ['.jpeg'],
+      'image/png': ['.png'],
+    },
   });
 
   //   const acceptedFileItems = acceptedFiles.map((file) => (
