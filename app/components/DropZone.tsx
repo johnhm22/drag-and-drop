@@ -33,10 +33,10 @@ const DropZone = ({ className }: { className: string }) => {
 
         // setFiles( (prevFiles) => [...prevFiles, ...acceptedFiles.map((file) => ...file, { preview: URL.createObjectURL(file) } )  ] );
       }
-      // if (fileRejections?.length) {
-      //   console.log('fileRejections added');
-      //   setRejectedFiles((prevFiles) => [...prevFiles, ...fileRejections]);
-      // }
+      if (fileRejections?.length) {
+        console.log('fileRejections added', fileRejections);
+        //   setRejectedFiles((prevFiles) => [...prevFiles, ...fileRejections]);
+      }
     },
     []
   );
