@@ -14,9 +14,17 @@ type File = {
   type: string;
 };
 
+type RejectedFile = {
+  file: File;
+  errors: {
+    message: string;
+    code: string;
+  }[];
+};
+
 const DropZone = ({ className }: { className: string }) => {
   const [files, setFiles] = useState<File[]>([]);
-  // const [rejectedFiles, setRejectedFiles] = useState<File[]>([]);
+  const [rejectedFiles, setRejectedFiles] = useState<RejectedFile[]>([]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: File[]) => {
@@ -34,8 +42,7 @@ const DropZone = ({ className }: { className: string }) => {
         // setFiles( (prevFiles) => [...prevFiles, ...acceptedFiles.map((file) => ...file, { preview: URL.createObjectURL(file) } )  ] );
       }
       if (fileRejections?.length) {
-        console.log('fileRejections added', fileRejections);
-        //   setRejectedFiles((prevFiles) => [...prevFiles, ...fileRejections]);
+        setRejectedFiles((prevFiles) => [...prevFiles, ...fileRejections]);
       }
     },
     []
@@ -56,54 +63,61 @@ const DropZone = ({ className }: { className: string }) => {
     maxSize: 1024 * 1000 * 5,
   });
 
-  //   const acceptedFileItems = acceptedFiles.map((file) => (
-  //     <li key={file.name}>
-  //       {file.name} - {file.size} bytes
-  //       <Image
-  //         src={file.preview}
-  //         width={100}
-  //         height={100}
-  //         alt='file image'
-  //         onLoad={() => {
-  //           URL.revokeObjectURL(file.preview);
-  //         }}
-  //       />
-  //       <button
-  //         className='rounded-md bg-red-500 text-white px-1 mt-2'
-  //         onClick={() => removeFile(file.name)}
-  //       >
-  //         Remove
-  //       </button>
-  //     </li>
-  //   ));
+  const acceptedFiles = files.map((file) => (
+    <li
+      key={file.name}
+      className='flex items-start w-2/5 place-content-between'
+    >
+      <div className='flex flex-col gap-2 text-sm'>
+        {file.name} - {file.size} bytes
+        <Image
+          src={file.preview}
+          width={50}
+          height={50}
+          alt='file image'
+          onLoad={() => {
+            URL.revokeObjectURL(file.preview);
+          }}
+        />
+      </div>
+      <button
+        className='rounded-md bg-red-500 text-white text-sm px-1 mr-10'
+        onClick={() => removeFile(file.name)}
+      >
+        Remove
+      </button>
+    </li>
+  ));
 
-  // const rejectedFileItems = fileRejections.map(({ file, errors }) => (
-  //   <li key={file.path}>
-  //     {file.path} - {file.size} bytes
-  //     <ul>
-  //       {errors.map((error) => (
-  //         <li key={error.code}>
-  //           {error.message}
-  //           <button
-  //             className='rounded-md bg-red-500 text-white px-1 mt-2'
-  //             onClick={() => removeRejectedFile(file.name)}
-  //           >
-  //             Remove
-  //           </button>
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   </li>
-  // ));
+  const rejectedFileItems = rejectedFiles.map(({ file, errors }) => (
+    <li key={file.path} className='text-sm mt-5 w-2/5 flex flex-col'>
+      <div className='flex justify-between'>
+        {file.path} - {file.size} bytes
+        <button
+          className='rounded-md bg-red-500 text-white text-sm px-1 mr-10'
+          onClick={() => removeRejectedFile(file.name)}
+        >
+          Remove
+        </button>
+      </div>
+      <ul>
+        <div className='font-semibold'>Errors:</div>
+        {errors.map((error) => (
+          <li key={error.code}>{error.message}</li>
+        ))}
+      </ul>
+    </li>
+  ));
 
   const removeFile = (fileName: string) => {
-    console.log(fileName);
     setFiles(files.filter((file) => fileName !== file.name));
   };
 
-  // const removeRejectedFile = (fileName: string) => {
-  //   setRejectedFiles(rejectedFiles.filter((file) => fileName !== file.name));
-  // };
+  const removeRejectedFile = (fileName: string) => {
+    setRejectedFiles(
+      rejectedFiles.filter((file) => fileName !== file.file.name)
+    );
+  };
 
   return (
     <>
@@ -116,36 +130,14 @@ const DropZone = ({ className }: { className: string }) => {
         )}
       </div>
       <div>
-        <div className='flex flex-col gap-10'>
-          <h2>Accepted files:</h2>
-          <ul>
-            {/* {acceptedFiles.map((file) => ( */}
-            {files.map((file) => (
-              <li key={file.name}>
-                {file.name} - {file.size} bytes
-                <Image
-                  src={file.preview}
-                  width={100}
-                  height={100}
-                  alt='file image'
-                  onLoad={() => {
-                    URL.revokeObjectURL(file.preview);
-                  }}
-                />
-                <button
-                  className='rounded-md bg-red-500 text-white px-1 mt-2'
-                  onClick={() => removeFile(file.name)}
-                >
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
+        <div className='flex flex-col'>
+          <h2 className='font-semibold'>Accepted files:</h2>
+          <ul>{acceptedFiles}</ul>
         </div>
-        {/* <div>
-          <h2>Rejected files:</h2>
+        <div className='mt-10'>
+          <h2 className='font-semibold'>Rejected files:</h2>
           <ul>{rejectedFileItems}</ul>
-        </div> */}
+        </div>
       </div>
     </>
   );
