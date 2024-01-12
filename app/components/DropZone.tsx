@@ -144,27 +144,3 @@ const DropZone = ({ className }: { className: string }) => {
 };
 
 export default DropZone;
-
-/* <ul>
-        {files.map((file) => (
-          <li key={file.name}>
-            {file.name}
-            <Image
-              src={file.preview}
-              width={100}
-              height={100}
-              alt='file image'
-              onLoad={() => {
-                URL.revokeObjectURL(file.preview);
-              }}
-            />
-            <button
-              className='rounded-md bg-red-500 text-white px-1 mt-2'
-              onClick={() => removeFile(file.name)}
-            >
-              Remove
-            </button>
-          </li>
-        ))}
-      </ul>
-      */
