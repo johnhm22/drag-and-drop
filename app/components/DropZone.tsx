@@ -53,6 +53,7 @@ const DropZone = ({ className }: { className: string }) => {
       'image/jpeg': ['.jpeg'],
       'image/png': ['.png'],
     },
+    maxSize: 1024 * 1000 * 5,
   });
 
   //   const acceptedFileItems = acceptedFiles.map((file) => (
