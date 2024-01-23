@@ -36,8 +36,7 @@ const DropZone = ({ className }: { className: string }) => {
           ...acceptedFiles.map((file) =>
             Object.assign(file, { preview: URL.createObjectURL(file) })
           ),
-        ]);
-        console.log('accpetedFiles', acceptedFiles);
+        ]);        
       }
       if (fileRejections?.length) {
         setRejectedFiles((prevFiles) => [...prevFiles, ...fileRejections]);
