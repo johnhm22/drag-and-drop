@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import { submitForm } from '@/lib/submitForm';
 
 type File = {
   path: string;
@@ -118,16 +119,13 @@ const DropZone = ({ className }: { className: string }) => {
       formData.append('file', file);
     });
     formData.append('upload_preset', 'dragdrop');
-
-    const URL = process.env.NEXT_PUBLIC_CLOUDINARY_URL!;
-
-    const data = await fetch(URL, {
-      method: 'POST',
-      body: formData,
-    }).then((res) => res.json());
-
-    console.log('data', data);
-    setFiles([]);
+    const result = await submitForm(formData);
+    if (result.status === 'error') {
+      window.alert('Sorry, the files could not be submitted. Please try again');
+    } else {
+      setFiles([]);
+      window.alert('Files successfully submitted.');
+    }
   };
 
   return (
