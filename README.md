@@ -12,7 +12,9 @@ Simply clone the repository
 Run npm i to install all the packages and dependencies in the package.json  
 Run npm run dev in the terminal and open a new browser tab and navigate to http://localhost:3000/  
 
-
+### Reference  
+Credit to Colby Fayock  
+https://www.youtube.com/watch?v=8uChP5ivQ1Q&t=45s
 
 
 
